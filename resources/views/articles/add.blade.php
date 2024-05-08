@@ -10,10 +10,11 @@
             </div>
         @endif
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             @csrf
             <input type="text" class="form-control mb-2" name="title" placeholder="Title">
             <textarea name="body" class="form-control mb-2" placeholder="Body"></textarea>
+            <input type="file" name="photo" class="form-control mb-2" placeholder="Upload Photo">
             <select name="category_id" class="form-select mb-2">
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>

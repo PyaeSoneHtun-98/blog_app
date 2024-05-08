@@ -20,14 +20,14 @@
             </div>
         @endif
 
-        <form action="{{ url('/articles/edit') }}" method="post">
+        <form action="{{ url('/articles/edit') }}" method="post" enctype="multipart/form-data">
 
             @csrf
 
             <input type="hidden" name = "id" value="{{ $article->id }}">
 
             <input name="title" type="text" class="form-control mb-2" value="{{ $article->title }}">
-
+            <input type="file" name="photo" class="form-control mb-2" placeholder="Upload Photo">
             <textarea name="body" class="form-control mb-2">{{ $article->body }}</textarea>
 
             <select name="category_id" class="form-select mb-3">

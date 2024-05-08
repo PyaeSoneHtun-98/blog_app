@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 
 
-
-
 class ArticleController extends Controller
 {
     public function __construct()
@@ -53,26 +51,44 @@ class ArticleController extends Controller
     }
 
     public function create()
-    {
-        $validator = validator(request()->all(), [
-            'title' => 'required',
-            'body' => 'required',
-            'category_id' => 'required',
-        ]);
+{
+    $validator = validator(request()->all(), [
+        'title' => 'required',
+        'category_id' => 'required',
+        "body" => "required",
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator);
-        }
+    if ($validator->fails()) {
+        return back()->withErrors($validator);
+    }
 
+    try {
         $article = new Article;
         $article->title = request()->title;
         $article->body = request()->body;
         $article->category_id = request()->category_id;
         $article->user_id = auth()->user()->id;
+
         $article->save();
 
-        return redirect('/articles');
+        if (request()->hasFile('photo')) {
+            $photo = request()->file('photo');
+            $photoPath = 'articles'; 
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photo->storeAs('public/' . $photoPath, $photoName);
+            $article->photo = 'storage/' . $photoPath . '/' . $photoName;
+            $article->save();
+        }
+
+        return redirect('/articles')->with('success', 'Article created successfully!');
+    } catch (\Exception $e) {
+        return back()->withErrors(['photo' => 'Error uploading photo: ' . $e->getMessage()]);
     }
+}
+
+    
+    
 
     public function edit($id)
     {
@@ -92,8 +108,7 @@ class ArticleController extends Controller
 
 
 
-    public function update()
-    {
+    public function update(Request $request)    {
 
         $validator = validator(request()->all(), [
 
@@ -101,24 +116,33 @@ class ArticleController extends Controller
 
             'body' => 'required',
 
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+
             'category_id' => 'required',
 
         ]);
 
         if ($validator->fails()) back()->withErrors($validator);
-
-        Article::where('id', request()->id)->update([
-
-            'title' => request()->title,
-
-            'body' => request()->body,
-
-            'category_id' => request()->category_id,
-
-            'updated_at' => DB::raw('now()'),
-
-        ]);
-
-        return redirect('/articles');
+        try {
+            $article = Article::find($request->id);
+            $article->title = $request->title;
+            $article->body = $request->body;
+            $article->category_id = $request->category_id;
+    
+            // Handle photo upload (if provided)
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $photoPath = 'articles'; // Set your desired storage path
+                $photoName = time() . '_' . $photo->getClientOriginalName();
+                $photo->storeAs('public/' . $photoPath, $photoName);
+                $article->photo = 'storage/' . $photoPath . '/' . $photoName;
+            }
+    
+            $article->save();
+    
+            return redirect('/articles')->with('success', 'Article updated successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['photo' => 'Error updating article: ' . $e->getMessage()]);
+        }
     }
 }

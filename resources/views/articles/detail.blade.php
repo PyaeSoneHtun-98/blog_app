@@ -27,6 +27,24 @@
                 </span>
 
                 <small class="text-muted">{{ $article->created_at->diffForHumans() }}</small>
+
+                <div class="modal fade" id="imagePopup" tabindex="-1" aria-labelledby="imagePopupLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <img src="{{ asset($article->photo) }}" id="popup-image" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mb-2">
+          <img class="img-fluid" src="{{ asset($article->photo) }}" alt="{{ $article->title }}" data-bs-toggle="modal" data-bs-target="#imagePopup" data-src="{{ asset($article->photo) }}">
+        </div> 
                 <div class="mb-3">{{ $article->body }}</div>
                 @auth
                     @can('delete-article', $article)
