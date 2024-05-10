@@ -1,0 +1,11 @@
+.pagination .page-link {
+    color: #333 !important; /* Default link color */
+    border-color: #ddd !important; /* Border color */
+  }
+  
+  .pagination .page-link.active,
+  .pagination .page-item.active .page-link {
+    background-color:red !important; /* Active link background */
+    border-color: red !important; /* Active link border */
+    color: #fff !important; /* Active link text color */
+  }

@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class ArticleController extends Controller
@@ -18,7 +20,7 @@ class ArticleController extends Controller
     
     public function index()
     {
-        $data = Article::latest()->paginate(5);
+        $data = Article::latest()->paginate(8);
 
         return view('articles.index', [
             'articles' => $data
@@ -56,7 +58,7 @@ class ArticleController extends Controller
         'title' => 'required',
         'category_id' => 'required',
         "body" => "required",
-        'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
     ]);
 
     if ($validator->fails()) {
@@ -67,6 +69,7 @@ class ArticleController extends Controller
         $article = new Article;
         $article->title = request()->title;
         $article->body = request()->body;
+        $article->prices = request()->prices;
         $article->category_id = request()->category_id;
         $article->user_id = auth()->user()->id;
 
@@ -116,7 +119,9 @@ class ArticleController extends Controller
 
             'body' => 'required',
 
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'prices' => 'required',
+
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
 
             'category_id' => 'required',
 
@@ -127,18 +132,24 @@ class ArticleController extends Controller
             $article = Article::find($request->id);
             $article->title = $request->title;
             $article->body = $request->body;
+            $article->prices = $request->prices;
             $article->category_id = $request->category_id;
-    
-            // Handle photo upload (if provided)
-            if ($request->hasFile('photo')) {
-                $photo = $request->file('photo');
-                $photoPath = 'articles'; // Set your desired storage path
-                $photoName = time() . '_' . $photo->getClientOriginalName();
-                $photo->storeAs('public/' . $photoPath, $photoName);
-                $article->photo = 'storage/' . $photoPath . '/' . $photoName;
+            $article->photo = $request->photo;
+            $previousPhotoPath = $article->photo;
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            $photoPath = 'articles';
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photo->storeAs('public/' . $photoPath, $photoName);
+            $article->photo = 'storage/' . $photoPath . '/' . $photoName;
+
+            if ($previousPhotoPath) {
+                Storage::delete(str_replace('storage/', '', $previousPhotoPath));
             }
-    
-            $article->save();
+        }
+
+        $article->save();
     
             return redirect('/articles')->with('success', 'Article updated successfully!');
         } catch (\Exception $e) {

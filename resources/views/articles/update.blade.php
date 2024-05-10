@@ -29,6 +29,7 @@
             <input name="title" type="text" class="form-control mb-2" value="{{ $article->title }}">
             <input type="file" name="photo" class="form-control mb-2" placeholder="Upload Photo">
             <textarea name="body" class="form-control mb-2">{{ $article->body }}</textarea>
+            <textarea name="prices" class="form-control mb-2">{{ $article->prices }}</textarea>
 
             <select name="category_id" class="form-select mb-3">
 

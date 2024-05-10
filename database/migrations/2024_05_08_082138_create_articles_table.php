@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('photo')->nullable();
             $table->text('body');
+            $table->integer('price')->nullable();
             $table->integer('category_id');
             $table->integer('user_id');
             $table->timestamps();
