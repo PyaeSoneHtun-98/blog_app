@@ -6,7 +6,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 
 Route::get('/', [ArticleController::class, 'index']);
-Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/article', [ArticleController::class, 'index']);
 
 Route::get('/articles/detail/{id}', [ArticleController::class, 'detail']);
 

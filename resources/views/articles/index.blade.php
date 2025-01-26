@@ -8,25 +8,11 @@
             </div>
         @endif
 
-        <div class="modal fade" id="imagePopup" tabindex="-1" aria-labelledby="imagePopupLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="imagePopupLabel">Article Image</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            <img src="" id="popup-image" alt="" class="img-fluid">
-            </div>
-            </div>
-            </div>
-        </div>
-
-        <div class="row">
+        <div class="row g-3">
             @foreach ($articles as $article)
             <div class="col-6 col-md-3">
-                    <div class="flex card mb-3 shadow-md rounded-3">
-                        <div class="card-body">
+                    <div class="flex card mb-2"  >
+                        <div class="card-body shadow-md rounded-3" style="background-color:#FFC7D4;">
                             <h4 class="card-title">{{ $article->title }} </h4>
                             <small class="text-muted">
                                 <b class="text-success">
@@ -44,21 +30,35 @@
                                 </span>,
 
                                 {{ $article->created_at->diffForHumans() }}</small>
-                            <!-- <div class="mb-2">{{ $article->body }}</div> -->
-                            <div class="image-container mb-2" >
-                                <img  class="img-fluid rounded mb-3 aspect-ratio aspect-ratio-16*9"  src="{{ asset($article->photo) }}" alt="{{ $article->title }}">
-                            </div>
-                            <a class="btn btn-sm rounded" style="background-color: #FAA4BB; color: #000000;" href="{{ url("/articles/detail/$article->id") }}">
+                            <a href="{{ url('/articles/detail/' . $article->id) }}">
+                                <div class="image-container mb-2" style="max-height: 345px">
+                                    {{-- <div class="card-image mb-2"> --}}
+                                    @if (isset($article->photos))
+                                        <?php
+                                            try {
+                                                $photoUrls = json_decode($article->photos);
+                                                $firstImageUrl = $photoUrls[0];
+                                            } catch (Exception $e) {
+                                                $firstImageUrl = asset('logo.jpg'); 
+                                            }
+                                        ?>
+                                        <img  class="img-fluid rounded mb-3 aspect-ratio aspect-ratio-16*9" src="{{ $firstImageUrl }}" alt="{{ $article->title }}">
+                                        @else
+                                        <img class="img-fluid rounded mb-3 aspect-ratio aspect-ratio-16*9" src="{{ asset('placeholder.jpg') }}" alt="No image available">
+                                    @endif
+                                </div>
+                            </a>
+                            <a class="btn btn-sm rounded" style="background-color: #CF4930; color: #ffffff;" href="{{ url("/articles/detail/$article->id") }}">
                                 Details
                             </a>
-                            <span class="float-end font-bold">{{ $article->prices }} ks</span>
+                            <span class="float-end font-weight-bold">{{ $article->price }} ks</span>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <div class="d-flex justify-content-center">  {{ $articles->links() }}
+        <div class="d-flex justify-content-center pt-4">  {{ $articles->links() }}
         </div>
     </div>
 @endsection

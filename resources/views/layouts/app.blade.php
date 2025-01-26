@@ -18,14 +18,14 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body style=" background-color: #F0D6E8;">
+<body style=" background-color: #FDE6F6;">
     <div id="app" >
-        <nav style="background-color:#E3B5D5;" class="navbar navbar-expand-md navbar-light shadow-sm text-black">
+        <nav style="background-color:#F08CB0 ;" class="navbar navbar-expand-md navbar-light shadow-sm text-black">
             <div class="container">              
                 <a class="navbar-brand" href="{{ url('/') }}">
-                <img alt="Cute U Wear" style="width: 50px;" class="img-fluid image-sm" src="https://media.discordapp.net/attachments/1149339884134338580/1237969792770641950/1712241910389.png?ex=663d94b6&is=663c4336&hm=6e85735855659c0a4e6b0918fcef7124dee6c4ad4f1107ddb4765293f2f0cdb2&=&format=webp&quality=lossless&width=593&height=593"  />
+                <img alt="Cute U Wear" style="width: 50px;" class="img-fluid image-sm" src="{{ asset('articles/logo.png') }}"  />
             </a>
-                <button class="navbar-toggler" style="background-color: #F0D6E8;" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler" style="background-color: #FDE6F6;" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -84,7 +84,7 @@
             </div>
         </nav>
 
-        <main class="py-4" style=" background-color: #F0D6E8;">
+        <main class="py-4" style=" background-color: #F4F4F4;">
             @yield('content')
         </main>
     </div>
