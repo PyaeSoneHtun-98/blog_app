@@ -12,6 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            AdminUserSeeder::class,
+            SizeSeeder::class,
+            // Add other seeders as needed
+        ]);
+
         \App\Models\Article::factory(20)->create();
         \App\Models\Comment::factory(40)->create();
 

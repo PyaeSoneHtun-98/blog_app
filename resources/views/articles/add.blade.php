@@ -11,8 +11,8 @@
         @endif
         <a href="{{ url()->previous() }}" class="btn btn-sm mb-3" style="background-color: #000000; color: #FAA4BB;">
             <span class="glyphicon glyphicon-chevron-left"></span> Back
-            </a>
-        <form method="post" enctype="multipart/form-data">
+        </a>
+        <form method="post" action="{{ route('articles.create') }}" enctype="multipart/form-data">
             @csrf
             <input type="text" class="form-control mb-2" name="title" placeholder="Title">
             <textarea name="body" class="form-control mb-2" placeholder="Body"></textarea>
@@ -22,8 +22,6 @@
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
-
-           
             </select>
             <button class="btn btn-primary">Add Article</button>
         </form>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->json('photos')->default(json_encode([]));
+            $table->string('image')->nullable();
             $table->text('body');
             $table->integer('price')->nullable();
             $table->integer('category_id');
